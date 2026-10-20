@@ -1,0 +1,17 @@
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/TestResults
+.git
+.vs
+.env
+.env.*
+**/*.user
+**/*.dacpac
+**/*.bacpac
+**/*.bak
+**/*.md
+
+**/logs/
+*.jsonl

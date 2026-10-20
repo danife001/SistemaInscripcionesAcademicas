@@ -1,0 +1,77 @@
+name: inscripciones-academicas
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Define MSSQL_SA_PASSWORD en .env}"
+    ports:
+      - "127.0.0.1:${SQL_PORT:-14333}:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'SQLCMDPASSWORD="$$MSSQL_SA_PASSWORD" /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -C -b -Q "SELECT 1" >/dev/null'
+      interval: 10s
+      timeout: 5s
+      start_period: 40s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: SistemaInscripcionesAcademicas.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "${APP_ENVIRONMENT:-Development}"
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=SistemaInscripcionesAcademicas;User Id=sa;Password=${MSSQL_SA_PASSWORD:?Define MSSQL_SA_PASSWORD en .env};Encrypt=True;TrustServerCertificate=True;"
+      Database__InitializeOnStartup: "true"
+      Database__SeedCatalogOnStartup: "true"
+      DataProtection__KeysPath: /app/keys
+      Logging__File__Directory: /app/logs
+      Administrador__CrearAlIniciar: "${ADMIN_CREAR_AL_INICIAR:-false}"
+      Administrador__Correo: "${ADMIN_CORREO:-}"
+      Administrador__Nombre: "${ADMIN_NOMBRE:-Administrador}"
+      Administrador__Password: "${ADMIN_PASSWORD:-}"
+      HttpsRedirection__Enabled: "false"
+    ports:
+      - "127.0.0.1:${API_PORT:-5234}:8080"
+    volumes:
+      - api-keys:/app/keys
+      - api-logs:/app/logs
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, curl, --fail, --silent, --show-error, http://localhost:8080/health]
+      interval: 10s
+      timeout: 5s
+      start_period: 40s
+      retries: 12
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, wget, --quiet, --spider, http://127.0.0.1/health]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
+  api-keys:
+  api-logs:

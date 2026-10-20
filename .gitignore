@@ -1,0 +1,18 @@
+.vs/
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/TestResults/
+*.user
+.env
+.env.*
+!.env.example
+
+**/logs/
+*.jsonl
+
+# Exportaciones locales con datos de usuarios y copias de seguridad.
+*.dacpac
+*.bacpac
+*.bak

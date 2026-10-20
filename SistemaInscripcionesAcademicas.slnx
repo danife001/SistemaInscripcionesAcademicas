@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SistemaInscripcionesAcademicas.Api/SistemaInscripcionesAcademicas.Api.csproj" />
+  <Project Path="SistemaInscripcionesAcademicas.Tests/SistemaInscripcionesAcademicas.Tests.csproj" />
+</Solution>
