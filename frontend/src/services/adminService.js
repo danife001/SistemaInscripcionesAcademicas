@@ -1,5 +1,9 @@
 export async function solicitudAdmin(token, ruta = '', opciones = {}) {
-  const respuesta = await fetch(`/api/estudiantes${ruta}`, {
+  return solicitudAdministrativa(token, `/api/estudiantes${ruta}`, opciones);
+}
+
+export async function solicitudAdministrativa(token, ruta, opciones = {}) {
+  const respuesta = await fetch(ruta, {
     ...opciones,
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   });

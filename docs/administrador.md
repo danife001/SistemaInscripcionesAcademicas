@@ -23,7 +23,7 @@ Desde la raíz del proyecto:
 docker compose up -d --build api web
 ```
 
-Abre http://localhost:8080 e inicia sesión con el correo configurado y la contraseña de `.env`. Aparecerá **Administración de estudiantes**. Tras confirmar el acceso, puedes poner `ADMIN_CREAR_AL_INICIAR=false`, vaciar `ADMIN_PASSWORD` y ejecutar `docker compose up -d api`; la cuenta ya persistida continúa funcionando.
+Abre http://localhost:8080 e inicia sesión con el correo configurado y la contraseña de `.env`. Aparecerá **Administración académica**, con las pestañas **Estudiantes** y **Materias**. Tras confirmar el acceso, puedes poner `ADMIN_CREAR_AL_INICIAR=false`, vaciar `ADMIN_PASSWORD` y ejecutar `docker compose up -d api`; la cuenta ya persistida continúa funcionando.
 
 ## Ejecución local sin Docker
 
@@ -49,4 +49,4 @@ Configura la conexión y las tablas como indica el README. En la terminal donde 
 
 Las pruebas `AdministradorTests` verifican creación desde la configuración de arranque, login, identidad, listado, actualización, desactivación, rechazo de contraseña incorrecta, permisos, protección frente a elevación de roles, inicialización repetible y reversión ante una contraseña inicial inválida. La interfaz React se verificó mediante compilación y ESLint; la comprobación visual del panel queda para la aplicación reconstruida.
 
-La baja impide nuevos inicios de sesión. Los tokens Bearer emitidos previamente no se revocan de inmediato; conservan su vencimiento. El panel no incluye recuperación de contraseñas, reactivación de estudiantes ni administración de profesores y materias. La administración de materias sí está disponible mediante [endpoints y Swagger](materias.md).
+La baja impide nuevos inicios de sesión. Los tokens Bearer emitidos previamente no se revocan de inmediato; conservan su vencimiento. El panel incluye gestión de estudiantes y [materias](materias.md). No incluye recuperación de contraseñas, reactivación de estudiantes ni mantenimiento de profesores; los profesores activos existentes se consultan para asignar materias.

@@ -12,6 +12,11 @@ public class MateriaRepository : IMateriaRepository
 
     public MateriaRepository(ApplicationDbContext context) => _context = context;
 
+    public Task<List<ProfesorDisponibleDto>> ObtenerProfesoresActivosAsync() =>
+        _context.Profesores.AsNoTracking().Where(p => p.Activo)
+            .OrderBy(p => p.Nombre).ThenBy(p => p.Id)
+            .Select(p => new ProfesorDisponibleDto { Id = p.Id, Nombre = p.Nombre }).ToListAsync();
+
     public void Agregar(Materia materia) => _context.Materias.Add(materia);
     public Task<Materia?> ObtenerPorIdAsync(int id) =>
         _context.Materias.Include(m => m.Profesor).FirstOrDefaultAsync(m => m.Id == id);

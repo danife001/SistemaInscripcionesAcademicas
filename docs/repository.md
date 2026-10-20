@@ -47,7 +47,7 @@ La unidad de trabajo conserva la transacción del registro y añade una transacc
 
 Se adaptó la composición de dependencias de las pruebas existentes y se añadió una prueba HTTP que verifica el catálogo disponible, la inscripción de dos estudiantes, el rechazo de duplicados y profesor repetido, la exposición exclusiva de nombres de compañeros, el rechazo de cancelar una inscripción ajena, la cancelación propia y la reinscripción conservando el historial.
 
-Resultado actualizado: **73 casos aprobados**, incluidas pruebas HTTP con SQLite y seis pruebas de concurrencia contra SQL Server real en bases temporales. También se verificó que no existan referencias a `ApplicationDbContext` o EF Core en servicios y controladores.
+Resultado actualizado: **74 casos aprobados**, incluidas pruebas HTTP con SQLite y seis pruebas de concurrencia contra SQL Server real en bases temporales. También se verificó que no existan referencias a `ApplicationDbContext` o EF Core en servicios y controladores.
 
 La comprobación se ejecutó en una copia del código actualizado porque la API abierta bloqueaba su ejecutable. Para utilizar los cambios en la sesión local, reinicia la API y vuelve a ejecutar:
 

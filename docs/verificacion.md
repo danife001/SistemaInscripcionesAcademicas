@@ -94,3 +94,9 @@ Se integró Serilog con ILogger para archivos JSON Lines, rotación diaria y por
 Validación final: **73 pruebas aprobadas, 0 fallidas y 0 omitidas**, incluyendo SQL Server real. Las cuatro pruebas nuevas verifican conservación al reabrir el logger, rotación y retención, escritura concurrente y correlación de un error HTTP con su archivo. `docker compose config --quiet` terminó correctamente. El catálogo oficial de vulnerabilidades de NuGet consultado no publicó avisos para Serilog, Serilog.Extensions.Logging y Serilog.Sinks.File. La restauración local se hizo con el feed descargado por las limitaciones previas de acceso de NuGet; no se deshabilitó la auditoría en archivos del proyecto.
 
 La imagen no se reconstruyó durante esta tarea. Para activar el volumen y el proveedor: `docker compose up -d --build api`. No se requieren migraciones de la base de datos.
+
+## Pantalla de materias y limpieza de plantilla — 20 de octubre de 2026
+
+Se añadió la pestaña Materias al panel administrativo con formulario, selector de profesores, filtros, confirmación de baja y mensajes de error. GET /api/profesores devuelve únicamente profesores activos y exige Administrador. Se eliminaron WeatherForecastController.cs y WeatherForecast.cs.
+
+Validación: **74 pruebas aprobadas, 0 fallidas y 0 omitidas**, incluyendo SQL Server. La prueba adicional verifica permisos y contenido del selector; SwaggerTests confirma que /WeatherForecast responde 404 y no aparece en OpenAPI. React pasa build y ESLint. La verificación visual se intentó con una API aislada en SQLite, pero la herramienta de navegador denegó el acceso local por falta de autorización; no se afirma haber completado esa prueba. No se reconstruyeron los contenedores. Activación: `docker compose up -d --build api web`.

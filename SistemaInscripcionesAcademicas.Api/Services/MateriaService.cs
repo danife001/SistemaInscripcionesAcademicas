@@ -8,6 +8,7 @@ namespace SistemaInscripcionesAcademicas.Api.Services;
 
 public class MateriaService(IMateriaRepository materias, IUnidadTrabajo unidad) : IMateriaService
 {
+    public Task<List<ProfesorDisponibleDto>> ObtenerProfesoresActivosAsync() => materias.ObtenerProfesoresActivosAsync();
     public Task<List<MateriaDto>> ObtenerDisponiblesAsync() => materias.ObtenerDisponiblesAsync();
     public Task<List<MateriaDto>> ObtenerTodasAsync() => materias.ObtenerTodasAsync();
     public async Task<MateriaDto?> ObtenerPorIdAsync(int id) =>

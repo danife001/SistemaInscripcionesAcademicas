@@ -4,6 +4,7 @@ namespace SistemaInscripcionesAcademicas.Api.Services.Interfaces;
 
 public interface IMateriaService
 {
+    Task<List<ProfesorDisponibleDto>> ObtenerProfesoresActivosAsync();
     Task<List<MateriaDto>> ObtenerTodasAsync();
     Task<MateriaDto?> ObtenerPorIdAsync(int id);
     Task<MateriaDto> CrearAsync(GuardarMateriaDto dto);

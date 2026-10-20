@@ -194,7 +194,7 @@ La base del contenedor se crea con migraciones y recibe un catálogo inicial de 
 
 ## Acceso del administrador
 
-La misma pantalla de login admite estudiantes y administradores. El administrador ve un panel para listar, crear, editar y desactivar estudiantes. La cuenta inicial se configura mediante variables de entorno y nunca mediante el registro público.
+La misma pantalla de login admite estudiantes y administradores. El administrador ve un panel con las pestañas **Estudiantes** y **Materias** para listar, crear, editar y desactivar registros. La pestaña Materias incluye selector de profesores, créditos fijos, filtro de estado y confirmación de baja lógica. La cuenta inicial se configura mediante variables de entorno y nunca mediante el registro público.
 
 En esta copia, `.env` incluye `ADMIN_CREAR_AL_INICIAR=true`, el correo `admin@inscripciones.local` y una contraseña aleatoria en `ADMIN_PASSWORD`. Se crea al reconstruir y arrancar la API con `docker compose up -d --build api web`. Para una nueva instalación, configura estos valores siguiendo [la guía de administración](docs/administrador.md). No distribuyas `.env`.
 
@@ -300,6 +300,7 @@ El registro público asigna únicamente el rol `Estudiante`. El login acepta est
 | GET | `/health` | Público | Comprobar conexión a base de datos; `200` saludable o `503` no disponible |
 | GET | `/api/auth/me` | Autenticado | Consultar nombre, correo y roles de la sesión; `200` |
 | GET | `/api/materias` | Estudiante o Administrador | Disponibles para estudiantes; catálogo completo para administradores; `200` |
+| GET | `/api/profesores` | Administrador | Profesores activos para el selector de materias; `200` |
 | GET | `/api/materias/{id}` | Administrador | Detalle de una materia; `200` |
 | POST | `/api/materias` | Administrador | Crear una materia; `201` |
 | PUT | `/api/materias/{id}` | Administrador | Modificar una materia sin alterar historial; `200` |
@@ -314,7 +315,7 @@ El registro público asigna únicamente el rol `Estudiante`. El login acepta est
 | PUT | `/api/estudiantes/{id}` | Administrador | Actualizar nombre y correo; `200` |
 | DELETE | `/api/estudiantes/{id}` | Administrador | Desactivar un estudiante; `204` |
 
-`/openapi/v1.json` y `/swagger` están habilitados en Development. Existe también el endpoint de plantilla `GET /WeatherForecast`, público y ajeno al flujo académico. `ProfesoresController` no tiene endpoints implementados; tampoco existe CRUD de materias.
+`/openapi/v1.json` y `/swagger` están habilitados en Development. El panel administrativo dispone de las pestañas Estudiantes y Materias. `GET /api/profesores` proporciona los profesores activos para el selector de materias y requiere el rol Administrador. Los archivos y el endpoint de plantilla WeatherForecast fueron eliminados.
 
 ### Registro
 
@@ -480,7 +481,7 @@ dotnet test SistemaInscripcionesAcademicas.slnx
 
 La solución incluye la API y el proyecto de pruebas, con una única referencia válida entre ambos. También puedes ejecutar directamente `dotnet test SistemaInscripcionesAcademicas.Tests/SistemaInscripcionesAcademicas.Tests.csproj`.
 
-En la última ejecución de revisión se aprobaron **73 casos**, incluidos seis contra SQL Server real; cuatro de ellos verifican la coordinación entre dos instancias de la API. La cobertura incluye límite de materias, duplicados, profesores repetidos, cancelación, registros inactivos, actualización, correo duplicado, identidad del perfil, paginación, orden estable y validación de parámetros. También permanece una prueba de ejemplo de suma.
+En la última ejecución de revisión se aprobaron **74 casos**, incluidos seis contra SQL Server real; cuatro de ellos verifican la coordinación entre dos instancias de la API. La cobertura incluye límite de materias, duplicados, profesores repetidos, cancelación, registros inactivos, actualización, correo duplicado, identidad del perfil, paginación, orden estable y validación de parámetros. También permanece una prueba de ejemplo de suma.
 
 Las pruebas unitarias utilizan EF Core InMemory o SQLite según las operaciones que verifican; las de inscripción utilizan transacciones reales de SQLite. Las cinco pruebas de integración HTTP del flujo académico arrancan la aplicación real con `WebApplicationFactory` y SQLite en memoria: verifican el rechazo de contraseñas inválidas sin asignar roles, la reversión de la transacción si falla el rol, la actualización persistida con login mediante el nuevo correo, la paginación con validación y permisos HTTP y el flujo de inscripción, compañeros, cancelación y reinscripción a través de los repositorios. Otras dos pruebas verifican la interfaz Swagger, los permisos del documento OpenAPI, los esquemas de respuesta y que la documentación no esté publicada en Production. Cuatro pruebas adicionales verifican el catálogo inicial repetible, la conservación de datos existentes, el endpoint de salud y que las migraciones SQL Server estén sincronizadas con el modelo. Cada aplicación de prueba tiene su propia base y claves efímeras de Data Protection. No se modifica la configuración de SQL Server ni la protección de datos de la aplicación normal.
 
@@ -504,7 +505,7 @@ Las altas y cancelaciones del mismo estudiante utilizan una transacción y un bl
 
 Si la espera supera 10 segundos, se devuelve HTTP 409 con un mensaje para reintentar. No se necesitan migraciones. Consulta [la protección de concurrencia y sus pruebas](docs/concurrencia.md).
 
-La última ejecución completa aprobó 73 casos, incluidos cuatro de logs persistentes, ocho de manejo de excepciones, cuatro de administración y ocho de gestión de materias. Por defecto se ejecutan 67 casos sin SQL Server y se omiten las pruebas que requieren `SQLSERVER_TEST_CONNECTION`; la guía explica cómo habilitarlos con un SQL Server de pruebas. Se crean y eliminan bases temporales, sin modificar la base de la aplicación.
+La última ejecución completa aprobó 74 casos, incluidos cuatro de logs persistentes, ocho de manejo de excepciones, cuatro de administración y ocho de gestión de materias. Por defecto se ejecutan 68 casos sin SQL Server y se omiten las pruebas que requieren `SQLSERVER_TEST_CONNECTION`; la guía explica cómo habilitarlos con un SQL Server de pruebas. Se crean y eliminan bases temporales, sin modificar la base de la aplicación.
 
 Para incorporar estos cambios a los contenedores existentes, ejecuta desde la raíz:
 

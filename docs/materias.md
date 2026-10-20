@@ -10,7 +10,7 @@ La API expone estas operaciones mediante `IMateriaService`, `IMateriaRepository`
 | PUT | `/api/materias/{id}` | Administrador | Actualiza una materia activa sin alterar historial; 200. |
 | DELETE | `/api/materias/{id}` | Administrador | Baja lógica si no hay inscripciones activas; 204. |
 
-La consulta de la lista conserva acceso para estudiantes porque el portal la utiliza para inscribirse. Las otras operaciones están restringidas al administrador. No se añadió una pantalla React de mantenimiento de materias; las operaciones se pueden usar desde Swagger o un cliente HTTP.
+La consulta de la lista conserva acceso para estudiantes porque el portal la utiliza para inscribirse. Las otras operaciones están restringidas al administrador. El panel React incluye una pestaña Materias para crear, editar y desactivar, con selector de profesores activos (`GET /api/profesores`, exclusivo de administradores), créditos fijos en 3 y filtros Todas/Activas/Inactivas. Las bajas piden confirmación y conservan la fila visible con estado Inactiva. Las restricciones de historial e inscripciones se informan con el mensaje devuelto por la API. También se pueden usar Swagger y clientes HTTP.
 
 ## Datos y validaciones
 
@@ -59,3 +59,13 @@ Para activar el backend actualizado en Docker:
 ```powershell
 docker compose up -d --build api
 ```
+
+## Evaluar la pantalla
+
+1. Entra como administrador y abre **Materias**.
+2. Selecciona una materia sin inscripciones, pulsa **Editar**, modifica el nombre y guarda.
+3. Pulsa **Desactivar**, revisa la confirmación y confirma. Filtra **Inactivas** para verificar que se conserva.
+4. Pulsa **Crear materia**, asigna un nombre y selecciona el profesor cuya plaza quedó libre. Guarda; los créditos permanecen en 3.
+5. Intenta modificar una materia con historial o desactivar una con inscripciones activas: la API debe rechazarlo y la pantalla mostrar el motivo.
+
+Para activar pantalla y API actualizadas: `docker compose up -d --build api web`.

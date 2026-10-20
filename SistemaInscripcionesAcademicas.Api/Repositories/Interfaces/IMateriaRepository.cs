@@ -5,6 +5,7 @@ namespace SistemaInscripcionesAcademicas.Api.Repositories.Interfaces;
 
 public interface IMateriaRepository
 {
+    Task<List<ProfesorDisponibleDto>> ObtenerProfesoresActivosAsync();
     Task<List<MateriaDto>> ObtenerTodasAsync();
     Task<Materia?> ObtenerPorIdAsync(int id);
     Task<bool> ProfesorActivoAsync(int id);

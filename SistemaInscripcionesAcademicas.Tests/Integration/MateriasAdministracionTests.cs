@@ -165,4 +165,19 @@ public class MateriasAdministracionTests
         }
     }
 
+    [Fact]
+    public async Task Profesores_SelectorSoloActivosYRestringidoAlAdministrador()
+    {
+        await using var app = new AplicacionPruebas();
+        using var admin = app.CreateClient(); using var alumno = app.CreateClient(); using var anonimo = app.CreateClient();
+        var (_, profesores) = await Preparar(app, admin, alumno);
+        var opciones = (await admin.GetFromJsonAsync<List<ProfesorDisponibleDto>>("/api/profesores"))!;
+        Assert.Equal(2, opciones.Count);
+        Assert.Contains(opciones, p => p.Id == profesores[0]);
+        Assert.Contains(opciones, p => p.Id == profesores[1]);
+        Assert.DoesNotContain(opciones, p => p.Id == profesores[2]);
+        Assert.Equal(HttpStatusCode.Forbidden, (await alumno.GetAsync("/api/profesores")).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await anonimo.GetAsync("/api/profesores")).StatusCode);
+    }
+
 }

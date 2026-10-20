@@ -135,7 +135,7 @@ Si Docker informa «Acceso denegado» al canal del motor, utiliza una terminal d
 
 ## Estado de validación
 
-Se validó la sintaxis y la resolución de Compose con `docker compose config --quiet`. La última ejecución completa aprobó 73 pruebas del proyecto, incluidas la carga repetible del catálogo, la conservación de datos existentes, el endpoint de salud y la sincronización del modelo con sus migraciones SQL Server.
+Se validó la sintaxis y la resolución de Compose con `docker compose config --quiet`. La última ejecución completa aprobó 74 pruebas del proyecto, incluidas la carga repetible del catálogo, la conservación de datos existentes, el endpoint de salud y la sincronización del modelo con sus migraciones SQL Server.
 
 El usuario ejecutó la construcción y confirmó el funcionamiento en Docker. Desde el entorno de revisión se comprobaron HTTP 200 para React, Swagger y OpenAPI, y Healthy tanto por Nginx como por la API directa. El acceso al canal del motor desde el entorno sigue restringido; los nuevos cambios de concurrencia requieren reconstruir API y web con `docker compose up -d --build api web`. Las pruebas SQL Server del código actualizado ya pasaron sobre bases temporales del servidor en contenedor.
 

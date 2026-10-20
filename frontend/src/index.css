@@ -237,3 +237,13 @@ button:disabled {
   justify-content: center;
   margin-top: 28px;
 }
+
+.admin-acciones { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-formulario { margin-top: 20px; max-width: 520px; }
+.admin-formulario select { padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; width: 100%; }
+.admin-confirmacion { margin-top: 20px; padding: 18px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; }
+.admin-tabla-contenedor { overflow-x: auto; margin-top: 16px; }
+.admin-tabla { width: 100%; border-collapse: collapse; background: white; }
+.admin-tabla caption { text-align: left; padding: 12px 0; font-weight: bold; }
+.admin-tabla th, .admin-tabla td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+.admin-tabla th { background: #e0edff; }

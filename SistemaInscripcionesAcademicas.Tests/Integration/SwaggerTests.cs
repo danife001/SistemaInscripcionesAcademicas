@@ -26,6 +26,8 @@ public class SwaggerTests
         Assert.False(esquema.TryGetProperty("bearerFormat", out _));
 
         var rutas = root.GetProperty("paths");
+        Assert.False(rutas.TryGetProperty("/WeatherForecast", out _));
+        Assert.Equal(HttpStatusCode.NotFound, (await cliente.GetAsync("/WeatherForecast")).StatusCode);
         Assert.True(rutas.GetProperty("/api/estudiantes/me").GetProperty("put").GetProperty("security")[0]
             .TryGetProperty("Bearer", out _));
         Assert.False(rutas.GetProperty("/api/auth/login").GetProperty("post").TryGetProperty("security", out _));
